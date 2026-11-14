@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#071518" />
+  <title>RIO DE ASFALTO — Cidade Aberta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23091519'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='sans-serif' font-weight='700' font-size='27' fill='%23d4ff58'%3ERJ%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+    {"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js"}}
+  </script>
+</head>
+<body>
+  <div id="game"></div>
+  <div class="vignette"></div>
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">R<span>·</span>J</div><div><b>RIO DE ASFALTO</b><small>VIDA LIVRE · 2025</small></div></div>
+    <div class="top-stats"><div class="stat"><small>CARTEIRA</small><b id="money">R$ 250</b></div><div class="stat"><small>REPUTAÇÃO</small><b id="rep">NOVATO</b></div><div class="stat wanted" id="wanted"><small>PROCURADO</small><b>☆☆☆☆☆</b></div></div>
+    <button class="icon-btn" id="pauseBtn" aria-label="Pausar">Ⅱ</button>
+  </header>
+  <div class="location"><span class="location-dot"></span><div><b id="district">CENTRO · RIO DE JANEIRO</b><small id="clock">08:32 — MANHÃ</small></div></div>
+  <div id="minimap-wrap"><div class="map-label">MAPA DA CIDADE <span>● AO VIVO</span></div><canvas id="minimap" width="220" height="220"></canvas><div class="map-legend"><i class="legend-player"></i> VOCÊ <i class="legend-job"></i> TRABALHO <i class="legend-police"></i> POLÍCIA</div></div>
+  <section class="mission-card" id="missionCard"><div class="mission-eyebrow"><span class="pulse"></span><span id="missionType">TRABALHO DISPONÍVEL</span><span class="mission-distance" id="missionDistance">—</span></div><h2 id="missionTitle">Sua cidade. Suas regras.</h2><p id="missionDesc">Pegue sua moto e descubra o que o Rio tem pra você.</p><div class="mission-bottom"><span id="missionReward">ESCOLHA UM TRABALHO NO MAPA</span><button id="missionBtn">VER TRABALHOS <b>↗</b></button></div></section>
+  <div class="ride-hud" id="rideHud"><div class="speed"><strong id="speed">00</strong><small>KM/H</small></div><div class="ride-divider"></div><div><b id="rideName">MOTO 160</b><small id="rideStatus">LIVRE · REGULADA</small></div><div class="fuel"><span>COMBUSTÍVEL</span><div><i id="fuelFill"></i></div></div></div>
+  <div class="interaction" id="interaction"><span class="keycap">E</span><span id="interactionText">Interagir</span></div>
+  <div class="toast" id="toast"><span>✦</span><b id="toastText">Bem-vindo ao Rio!</b></div>
+  <div class="controls-hint"><span>WASD <i>MOVER</i></span><span>F <i>ENTRAR / SAIR</i></span><span>E <i>INTERAGIR</i></span><span>SHIFT <i>CORRER</i></span><span>Q <i>ARMA</i></span><span>CLIQUE <i>USAR</i></span></div>
+  <div class="weapon-chip" id="weaponChip"><span>◈</span><b>DESARMADO</b><small>Q PARA TROCAR</small></div>
+  <div class="screen" id="welcomeScreen">
+    <div class="welcome-panel">
+      <div class="welcome-kicker"><span>RIO DE JANEIRO, BRASIL</span><i></i><span>O MUNDO É SEU</span></div>
+      <h1>VIVA A CIDADE.<br><em>DO SEU JEITO.</em></h1>
+      <p>As ruas são suas. Comece com R$ 250 e uma moto regulada. Trabalhe, conquiste sua CNH, explore cada canto — e escreva sua própria história no Rio.</p>
+      <div class="avatar-picker"><div><label>SEU PERSONAGEM</label><small>Personalize seu visual</small></div><div class="choice-row"><button class="choice active" data-avatar="1"><span class="avatar-dot avatar-a"></span> LIA</button><button class="choice" data-avatar="2"><span class="avatar-dot avatar-b"></span> CAUÃ</button><button class="choice" data-avatar="3"><span class="avatar-dot avatar-c"></span> NINA</button></div></div>
+      <div class="starter-bike"><span class="bike-icon">⌁</span><div><b>SUA PRIMEIRA MOTO</b><small>Street 160 · pronta pra rodar · tanque cheio</small></div><span class="included">INCLUSA</span></div>
+      <button class="start-btn" id="startBtn">ENTRAR NA CIDADE <span>→</span></button>
+      <div class="welcome-foot"><span>⟵ EXPLORAÇÃO LIVRE</span><span>JOGO 3D · SALVAMENTO AUTOMÁTICO</span></div>
+    </div>
+    <div class="welcome-side"><div class="side-number">01 <i>/ 04</i></div><div class="side-rule"></div><b>UMA CIDADE<br>EM MOVIMENTO</b><small>Trabalhos honestos.<br>Escolhas difíceis.<br>Uma vida inteira.</small><div class="side-location">22°54' S &nbsp; 43°12' W<br><span>RIO DE JANEIRO</span></div></div>
+  </div>
+  <div class="modal hidden" id="jobsModal"><div class="modal-panel"><button class="close-modal" data-close>×</button><span class="modal-kicker">CENTRAL DE OPORTUNIDADES · RIO</span><h2>Como vai ganhar<br><em>seu próximo real?</em></h2><p>Escolha uma atividade e siga os marcadores pela cidade.</p><div class="job-list">
+    <button class="job-option" data-job="delivery"><span class="job-icon orange">↗</span><span><b>ENTREGA EXPRESSA</b><small>Leve um pedido do Largo da Carioca até a Lapa. Sua moto já está pronta.</small></span><strong>+ R$ 85</strong><i>→</i></button>
+    <button class="job-option" data-job="taxi"><span class="job-icon yellow">⌖</span><span><b>RÁDIO-TÁXI</b><small>Busque um passageiro em Ipanema e leve-o até Copacabana.</small></span><strong>+ R$ 140</strong><i>→</i></button>
+    <button class="job-option" data-job="license-moto"><span class="job-icon blue">✓</span><span><b>CNH · CATEGORIA A</b><small>Faça o circuito de cones na autoescola. Taxa de inscrição: R$ 50.</small></span><strong>− R$ 50</strong><i>→</i></button>
+    <button class="job-option" data-job="license-car"><span class="job-icon blue">✓</span><span><b>CNH · CATEGORIA B</b><small>Prova prática de carro. Faça sua CNH A primeiro. Taxa: R$ 100.</small></span><strong>− R$ 100</strong><i>→</i></button>
+    <button class="job-option risky" data-job="chop"><span class="job-icon red">⚙</span><span><b>FERRO-VELHO · SERVIÇO SUJO</b><small>Recupere um carro abandonado e entregue-o ao desmanche. Fique atento!</small></span><strong>+ R$ 320</strong><i>→</i></button>
+  </div><div class="modal-note"><span>✦</span> Cada escolha muda a cidade. A polícia tem boa memória.</div></div></div>
+  <div class="modal hidden" id="pauseModal"><div class="pause-panel"><button class="close-modal" data-close>×</button><span class="modal-kicker">PAUSA · SUA JORNADA</span><h2>Seu Rio.<br><em>Seu ritmo.</em></h2><div class="pause-stats"><div><small>SALDO</small><b id="pauseMoney">R$ 250</b></div><div><small>CNH A</small><b id="licenseA">PENDENTE</b></div><div><small>CNH B</small><b id="licenseB">PENDENTE</b></div></div><button class="resume-btn" data-close>CONTINUAR JOGANDO <span>→</span></button><button class="reset-btn" id="resetBtn">RECOMEÇAR JORNADA</button></div></div>
+  <div class="mobile-controls"><button id="mobileAction">E</button><div class="touch-pad"><button data-dir="up">▲</button><div><button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button></div></div><button id="mobileEnter">F</button></div>
+  <script type="module" src="game.js"></script>
+</body>
+</html>
